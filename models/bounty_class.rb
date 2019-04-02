@@ -9,13 +9,9 @@ class Bounty
     @last_known_location = options['last_known_location']
   end
 
-  # TODO: write a save method that saves a pizza order
-  # into the database
   def save()
-    # first connect to the database
     db = PG.connect( {dbname: 'space_cowboys',
                       host: 'localhost'})
-    # prepare and SQL statement in a big string
     sql = "INSERT INTO space_cowboys
           (
             name,
@@ -26,11 +22,9 @@ class Bounty
           VALUES ($1, $2, $3, $4)
           RETURNING id
          "
-   # create a values array for my prepared statement
+    
     values = [@name, @species, @bounty_value, @last_known_location]
-    # use pg to run the prepared statement
     db.prepare("save", sql)
-    # finally close the db connection
     @id = db.exec_prepared("save", values)[0]["id"].to_i
     db.close()
   end
@@ -105,10 +99,3 @@ class Bounty
     #   db.close()
     # end
 end
-
-
-
-  # name
-  # species
-  # bounty_value
-  # last_known_location
